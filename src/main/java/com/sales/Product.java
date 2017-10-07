@@ -39,4 +39,8 @@ public class Product {
     public void setImage(byte[] image) {
         this.image = image;
     }
+
 }
+
+
+
