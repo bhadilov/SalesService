@@ -2,12 +2,12 @@ package com.sales;
 
 public class Categories {
 
-    private String ProductName, BrandTypeName, CategoryName, BrandsName;
-    int OriginalPrice, NewPrice, CategoryID;
+    private String ProductName, BrandTypeName, CategoryName, BrandsName,saleImage, SaleMallName;
+    int SalesBrandID, OriginalPrice, NewPrice, CategoryID;
 
-    public void setSalesProductName(String salesProductName) {
-        this.ProductName = salesProductName;
-    }
+    public void setSalesBrandID(int SalesBrandID) { this.SalesBrandID = SalesBrandID; }
+
+    public void setSalesProductName(String salesProductName) { this.ProductName = salesProductName; }
 
     public void setSalesBrandTypeName(String salesBrandType) {
         this.BrandTypeName = salesBrandType;
@@ -28,5 +28,9 @@ public class Categories {
     public void setSaleNewPrice(int saleNewPrice) { this.NewPrice = saleNewPrice;}
 
     public void setSaleCategoryID(int salesCategoryID) { this.CategoryID = salesCategoryID;}
+
+    public void setSaleImage(String saleImage) {this.saleImage = saleImage; }
+
+    public void setSaleMallName (String SaleMallName) {this.SaleMallName = SaleMallName; }
 
 }

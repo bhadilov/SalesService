@@ -6,7 +6,10 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
+import javax.annotation.PostConstruct;
+import javax.xml.ws.spi.http.HttpExchange;
 import java.io.FileInputStream;
+import java.io.IOException;
 import java.io.InputStream;
 import java.sql.*;
 import java.util.ArrayList;
@@ -44,6 +47,8 @@ public class SalesService {
         }
     }
 
+
+
     private static ArrayList<Product> getProducts(){
         Connection conn = null;
         Statement stmt = null;
@@ -61,7 +66,7 @@ public class SalesService {
             while(resultSet.next()){
                 Product product = new Product();
                 product.setProductName(resultSet.getString("Product_Name"));
-                product.setBrand(resultSet.getString("Brand"));
+                //product.setBrand(resultSet.getString("Brand"));
 //                product.setOriginalPrice(resultSet.getString("Original_Price"));
 //                product.setSalePrice(resultSet.getString("Sale_Price"));
                 product.setDiscountPercent(resultSet.getString("Discount_Perc"));
@@ -129,8 +134,9 @@ public class SalesService {
             Class.forName("com.mysql.jdbc.Driver");
             conn = DriverManager.getConnection(dbDetails[0], dbDetails[1], dbDetails[2]);
             stmt = conn.createStatement();
-            String queryStatement = "SELECT sb.Sales_Product_name, sbt.Sales_Brand_Type_name, sc.Sales_Category_id, sc.Sales_Category_name, sbn.Sales_Brands_Name, sb.Sales_Original_Price, sb.Sales_New_Price " +
+            String queryStatement = "SELECT sb.Sales_Brands_id, sb.Sales_Product_name, sbt.Sales_Brand_Type_name, sc.Sales_Category_id, sc.Sales_Category_name, sbn.Sales_Brands_Name, sb.Sales_Original_Price, sb.Sales_New_Price, sb.Sale_Image,sd.Sale_Malls_Name " +
                     "FROM SALES.Sales_Brand sb INNER JOIN SALES.Sales_Brand_Type sbt ON sb.Sales_brand_Type_id = sbt.Sales_Brand_Type_id " +
+                    "INNER JOIN SALES.Sales_Malls_Location sd ON sb.Sales_Malls_Location_id = sd.Sales_Malls_Location_id " +
                     "INNER JOIN SALES.Sales_Category sc ON sb.Sales_Brand_Category_id = sc.Sales_Category_id " +
                     "INNER JOIN SALES.Sales_Brands_Name sbn ON sb.Sales_Brand_Name_id = sbn.Sales_Brands_Name_id " +
                     "ORDER BY sc.Sales_Category_name, sbt.Sales_Brand_Type_name  Desc;";
@@ -138,7 +144,7 @@ public class SalesService {
 
             while(resultSet.next()){
                 Categories categories = new Categories();
-
+                categories.setSalesBrandID(resultSet.getInt("Sales_Brands_id"));
                 categories.setSalesProductName(resultSet.getString("Sales_Product_name"));
                 categories.setSalesBrandTypeName(resultSet.getString("Sales_Brand_Type_name"));
                 categories.setSalesCategoryName(resultSet.getString("Sales_Category_name"));
@@ -146,6 +152,8 @@ public class SalesService {
                 categories.setSaleOriginalPrice(resultSet.getInt("Sales_Original_Price"));
                 categories.setSaleNewPrice(resultSet.getInt("Sales_New_Price"));
                 categories.setSaleCategoryID(resultSet.getInt("Sales_Category_id"));
+                categories.setSaleImage(resultSet.getString("Sale_Image"));
+                categories.setSaleMallName(resultSet.getString("Sale_Malls_Name"));
                 allCategoryProducts.add(categories);
 
             }
@@ -186,6 +194,88 @@ public class SalesService {
         return categories;
     }
 
+    private static ArrayList<Product> searchForProductsByName(String searchProduct){
+        Connection conn = null;
+        Statement stmt = null;
+        String[] dbDetails = getDBDetails();
+        ArrayList<Product> allProducts = new ArrayList<Product>();
+
+        try {
+            Class.forName("com.mysql.jdbc.Driver");
+            conn = DriverManager.getConnection(dbDetails[0], dbDetails[1], dbDetails[2]);
+            stmt = conn.createStatement();
+
+            String queryStatement = "SELECT Sales_Brands_id,Sales_Product_name, Sales_New_Price FROM SALES.Sales_Brand where Sales_Product_name like '%" + searchProduct + "%'";
+            ResultSet resultSet = stmt.executeQuery(queryStatement);
+
+            while(resultSet.next()){
+                Product product = new Product();
+                product.setProductName(resultSet.getString("Sales_Product_name"));
+                product.setBrandsID(resultSet.getString("Sales_Brands_id"));
+                product.setNewPrice(resultSet.getString("Sales_New_Price"));
+
+               // Blob imageBlob = resultSet.getBlob("Images");
+
+//                if(imageBlob != null) {
+//                    byte[] imageBytes = imageBlob.getBytes(1, (int) imageBlob.length());
+//                    product.setImage(imageBytes);
+//                }
+//                else{product.setImage(new byte[1024]);
+//                }
+
+                allProducts.add(product);
+            }
+        }
+        catch (Exception exception){
+            logger.error(exception.getMessage());
+        }
+
+        return allProducts;
+    }
+
+    private static ArrayList<Categories> searchForProductByID(String productID){
+        Connection conn;
+        Statement stmt;
+        String[] dbDetails = getDBDetails();
+
+        ArrayList<Categories> allCategoryProducts= new ArrayList<Categories>();
+
+        try{
+            Class.forName("com.mysql.jdbc.Driver");
+            conn = DriverManager.getConnection(dbDetails[0], dbDetails[1], dbDetails[2]);
+            stmt = conn.createStatement();
+            String queryStatement = "SELECT sb.Sales_Brands_id, sb.Sales_Product_name, sbt.Sales_Brand_Type_name, sc.Sales_Category_id, sc.Sales_Category_name, sbn.Sales_Brands_Name, sb.Sales_Original_Price, sb.Sales_New_Price,sb.Sale_Image,sd.Sale_Malls_Name " +
+                    "FROM SALES.Sales_Brand sb INNER JOIN SALES.Sales_Brand_Type sbt ON sb.Sales_brand_Type_id = sbt.Sales_Brand_Type_id " +
+                    "INNER JOIN SALES.Sales_Malls_Location sd ON sb.Sales_Malls_Location_id = sd.Sales_Malls_Location_id " +
+                    "INNER JOIN SALES.Sales_Category sc ON sb.Sales_Brand_Category_id = sc.Sales_Category_id " +
+                    "INNER JOIN SALES.Sales_Brands_Name sbn ON sb.Sales_Brand_Name_id = sbn.Sales_Brands_Name_id " +
+                    "where sb.Sales_Brands_id = " + productID + " " +
+                    "ORDER BY sc.Sales_Category_name, sbt.Sales_Brand_Type_name  Desc;";
+            ResultSet resultSet = stmt.executeQuery(queryStatement);
+
+            while(resultSet.next()){
+                Categories categories = new Categories();
+                categories.setSalesBrandID(resultSet.getInt("Sales_Brands_id"));
+                categories.setSalesProductName(resultSet.getString("Sales_Product_name"));
+                categories.setSalesBrandTypeName(resultSet.getString("Sales_Brand_Type_name"));
+                categories.setSalesCategoryName(resultSet.getString("Sales_Category_name"));
+                categories.setSalesBrandsName(resultSet.getString("Sales_Brands_Name"));
+                categories.setSaleOriginalPrice(resultSet.getInt("Sales_Original_Price"));
+                categories.setSaleNewPrice(resultSet.getInt("Sales_New_Price"));
+                categories.setSaleCategoryID(resultSet.getInt("Sales_Category_id"));
+                categories.setSaleImage(resultSet.getString("Sale_Image"));
+                categories.setSaleMallName(resultSet.getString("Sale_Malls_Name"));
+                allCategoryProducts.add(categories);
+
+            }
+
+        }
+        catch (Exception exception){
+            logger.error(exception.getMessage());
+        }
+        return allCategoryProducts;
+    }
+
     public static void main(String[] args) {
 
         //port(8081);
@@ -204,10 +294,9 @@ public class SalesService {
         }, json());
 
 
-
         get("/clothes", new Route() {
             public Object handle(Request req, Response res) throws Exception {
-                return getClothes();
+                return "Test " + req;
             }
         }, json());
 
@@ -217,11 +306,36 @@ public class SalesService {
             }
         }, json());
 
-//        post("/categoryProducts", new Route() {
-//            public Object handle(Request req, Response res) throws Exception {
-//                return getAllCategoryProducts();
-//            }
-//        }, json());
+        post("/searchProducts/:searchProduct", new Route() {
+            public Object handle(Request req, Response res) throws Exception {
+
+                return searchForProductsByName(req.params(":searchProduct"));
+            }
+        }, json());
+
+        post("/getProductsByID/:productID", new Route() {
+            public Object handle(Request req, Response res) throws Exception {
+
+                return searchForProductByID(req.params(":productID"));
+            }
+        }, json());
+
+        post("/:search", new Route() {
+            public Object handle(Request req, Response res) throws Exception {
+
+                return "Test " + req.params(":search");
+            }
+        }, json());
+
+        post("getProductByID/:SalesBrandID", new Route() {
+            public Object handle(Request req, Response res) throws Exception {
+
+                return "Test " + req.params(":search");
+            }
+        }, json());
+
+
+
 
     }
 }

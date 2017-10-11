@@ -1,20 +1,19 @@
 package com.sales;
 
 public class Product {
-    private String productName, brand, originalPrice, salePrice, discountPercent, storeName, storeLocation, estimatedDistance;
+    private String ProductName,BrandsID , NewPrice, salePrice, discountPercent, storeName, storeLocation, estimatedDistance;
     private byte[] image;
 
-    public void setProductName(String productName) {
-        this.productName = productName;
+    public void setProductName(String ProductName) {this.ProductName = ProductName; }
+
+    public void setBrandsID(String BrandsID) {
+        this.BrandsID = BrandsID;
     }
 
-    public void setBrand(String brand) {
-        this.brand = brand;
-    }
+    public void setNewPrice(String NewPrice) { this.NewPrice = NewPrice; }
 
-    public void setOriginalPrice(String originalPrice) {
-        this.originalPrice = originalPrice;
-    }
+
+
 
     public void setSalePrice(String salePrice) {
         this.salePrice = salePrice;
