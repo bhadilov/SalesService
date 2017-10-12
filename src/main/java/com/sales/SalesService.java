@@ -351,6 +351,7 @@ public class SalesService {
 
         get("/allCategoryProducts", new Route() {
             public Object handle(Request req, Response res) throws Exception {
+                logger.info("Called the method successfully");
                 return getAllCategoryProducts();
             }
         }, json());
