@@ -276,14 +276,63 @@ public class SalesService {
         return allCategoryProducts;
     }
 
+    private static ArrayList<Recommend> getRecommendations(){
+        Connection conn;
+        Statement stmt;
+        String[] dbDetails = getDBDetails();
+
+        ArrayList<Recommend> recommendations= new ArrayList<Recommend>();
+
+        try{
+            Class.forName("com.mysql.jdbc.Driver");
+            conn = DriverManager.getConnection(dbDetails[0], dbDetails[1], dbDetails[2]);
+            stmt = conn.createStatement();
+            String queryStatement = "SELECT sb.Sales_Brands_id, sb.Sales_Product_name, sbt.Sales_Brand_Type_name, sc.Sales_Category_id, sc.Sales_Category_name, sbn.Sales_Brands_Name, sb.Sales_Original_Price, sb.Sales_New_Price, sb.Sale_Image,sd.Sale_Malls_Name " +
+                    "FROM SALES.Sales_Brand sb INNER JOIN SALES.Sales_Brand_Type sbt ON sb.Sales_brand_Type_id = sbt.Sales_Brand_Type_id " +
+                    "INNER JOIN SALES.Sales_Malls_Location sd ON sb.Sales_Malls_Location_id = sd.Sales_Malls_Location_id " +
+                    "INNER JOIN SALES.Sales_Category sc ON sb.Sales_Brand_Category_id = sc.Sales_Category_id " +
+                    "INNER JOIN SALES.Sales_Brands_Name sbn ON sb.Sales_Brand_Name_id = sbn.Sales_Brands_Name_id " +
+                    "ORDER BY sb.Sales_New_Price asc";
+            ResultSet resultSet = stmt.executeQuery(queryStatement);
+
+            while(resultSet.next()){
+                Recommend recommend = new Recommend();
+                recommend.setSalesBrandID(resultSet.getInt("Sales_Brands_id"));
+                recommend.setSalesProductName(resultSet.getString("Sales_Product_name"));
+                recommend.setSalesBrandTypeName(resultSet.getString("Sales_Brand_Type_name"));
+                recommend.setSalesCategoryName(resultSet.getString("Sales_Category_name"));
+                recommend.setSalesBrandsName(resultSet.getString("Sales_Brands_Name"));
+                recommend.setSaleOriginalPrice(resultSet.getInt("Sales_Original_Price"));
+                recommend.setSaleNewPrice(resultSet.getInt("Sales_New_Price"));
+                recommend.setSaleCategoryID(resultSet.getInt("Sales_Category_id"));
+                recommend.setSaleImage(resultSet.getString("Sale_Image"));
+                recommend.setSaleMallName(resultSet.getString("Sale_Malls_Name"));
+                recommendations.add(recommend);
+
+            }
+
+        }
+        catch (Exception exception){
+            logger.error(exception.getMessage());
+        }
+        return recommendations;
+    }
+
+
     public static void main(String[] args) {
 
         //port(8081);
-        port(1234);
+        port(8081);
 
         get("/category", new Route() {
             public Object handle(Request req, Response res) throws Exception {
                 return getCategories();
+            }
+        }, json());
+
+        get("/recommendations", new Route() {
+            public Object handle(Request req, Response res) throws Exception {
+                return getRecommendations();
             }
         }, json());
 
