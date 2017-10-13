@@ -292,7 +292,7 @@ public class SalesService {
                     "INNER JOIN SALES.Sales_Malls_Location sd ON sb.Sales_Malls_Location_id = sd.Sales_Malls_Location_id " +
                     "INNER JOIN SALES.Sales_Category sc ON sb.Sales_Brand_Category_id = sc.Sales_Category_id " +
                     "INNER JOIN SALES.Sales_Brands_Name sbn ON sb.Sales_Brand_Name_id = sbn.Sales_Brands_Name_id " +
-                    "ORDER BY sb.Sales_New_Price asc";
+                    "ORDER BY sb.Sales_New_Price desc, sb.Sales_Product_name desc";
             ResultSet resultSet = stmt.executeQuery(queryStatement);
 
             while(resultSet.next()){
