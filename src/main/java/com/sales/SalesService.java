@@ -205,7 +205,7 @@ public class SalesService {
             conn = DriverManager.getConnection(dbDetails[0], dbDetails[1], dbDetails[2]);
             stmt = conn.createStatement();
 
-            String queryStatement = "SELECT Sales_Brands_id,Sales_Product_name, Sales_New_Price, Sale_Image FROM SALES.Sales_Brand, where Sales_Product_name like '%" + searchProduct + "%'";
+            String queryStatement = "SELECT Sales_Brands_id,Sales_Product_name, Sales_New_Price, Sale_Image FROM SALES.Sales_Brand where Sales_Product_name like '%" + searchProduct + "%'";
             ResultSet resultSet = stmt.executeQuery(queryStatement);
 
             while(resultSet.next()){
@@ -215,14 +215,6 @@ public class SalesService {
                 product.setNewPrice(resultSet.getString("Sales_New_Price"));
                 product.setSaleImage(resultSet.getString("Sale_Image"));
 
-               // Blob imageBlob = resultSet.getBlob("Images");
-
-//                if(imageBlob != null) {
-//                    byte[] imageBytes = imageBlob.getBytes(1, (int) imageBlob.length());
-//                    product.setImage(imageBytes);
-//                }
-//                else{product.setImage(new byte[1024]);
-//                }
 
                 allProducts.add(product);
             }
