@@ -49,48 +49,48 @@ public class SalesService {
 
 
 
-    private static ArrayList<Product> getProducts(){
-        Connection conn = null;
-        Statement stmt = null;
-        String[] dbDetails = getDBDetails();
-        ArrayList<Product> allProducts = new ArrayList<Product>();
-
-        try {
-            Class.forName("com.mysql.jdbc.Driver");
-            conn = DriverManager.getConnection(dbDetails[0], dbDetails[1], dbDetails[2]);
-            stmt = conn.createStatement();
-
-            String queryStatement = "SELECT Product_Name, Brand, Discount_Perc, Images from SALES.Clothes";
-            ResultSet resultSet = stmt.executeQuery(queryStatement);
-
-            while(resultSet.next()){
-                Product product = new Product();
-                product.setProductName(resultSet.getString("Product_Name"));
-                //product.setBrand(resultSet.getString("Brand"));
-//                product.setOriginalPrice(resultSet.getString("Original_Price"));
-//                product.setSalePrice(resultSet.getString("Sale_Price"));
-                product.setDiscountPercent(resultSet.getString("Discount_Perc"));
-//                product.setStoreName(resultSet.getString("Store_Name"));
-//                product.setStoreLocation(resultSet.getString("Store_Location"));
-//                product.setEstimatedDistance(resultSet.getString("Est_Distance"));
-                Blob imageBlob = resultSet.getBlob("Images");
-
-                if(imageBlob != null) {
-                    byte[] imageBytes = imageBlob.getBytes(1, (int) imageBlob.length());
-                    product.setImage(imageBytes);
-                }
-                else{product.setImage(new byte[1024]);
-                }
-
-                allProducts.add(product);
-            }
-        }
-        catch (Exception exception){
-            logger.error(exception.getMessage());
-        }
-
-        return allProducts;
-    }
+//    private static ArrayList<Product> getProducts(){
+//        Connection conn = null;
+//        Statement stmt = null;
+//        String[] dbDetails = getDBDetails();
+//        ArrayList<Product> allProducts = new ArrayList<Product>();
+//
+//        try {
+//            Class.forName("com.mysql.jdbc.Driver");
+//            conn = DriverManager.getConnection(dbDetails[0], dbDetails[1], dbDetails[2]);
+//            stmt = conn.createStatement();
+//
+//            String queryStatement = "SELECT Product_Name, Brand, Discount_Perc, Images from SALES.Clothes";
+//            ResultSet resultSet = stmt.executeQuery(queryStatement);
+//
+//            while(resultSet.next()){
+//                Product product = new Product();
+//                product.setProductName(resultSet.getString("Product_Name"));
+//                //product.setBrand(resultSet.getString("Brand"));
+////                product.setOriginalPrice(resultSet.getString("Original_Price"));
+////                product.setSalePrice(resultSet.getString("Sale_Price"));
+//                product.setDiscountPercent(resultSet.getString("Discount_Perc"));
+////                product.setStoreName(resultSet.getString("Store_Name"));
+////                product.setStoreLocation(resultSet.getString("Store_Location"));
+////                product.setEstimatedDistance(resultSet.getString("Est_Distance"));
+//                Blob imageBlob = resultSet.getBlob("Images");
+//
+//                if(imageBlob != null) {
+//                    byte[] imageBytes = imageBlob.getBytes(1, (int) imageBlob.length());
+//                    product.setImage(imageBytes);
+//                }
+//                else{product.setImage(new byte[1024]);
+//                }
+//
+//                allProducts.add(product);
+//            }
+//        }
+//        catch (Exception exception){
+//            logger.error(exception.getMessage());
+//        }
+//
+//        return allProducts;
+//    }
 
     private static ArrayList<Clothes> getClothes(){
         Connection conn = null;
@@ -205,7 +205,7 @@ public class SalesService {
             conn = DriverManager.getConnection(dbDetails[0], dbDetails[1], dbDetails[2]);
             stmt = conn.createStatement();
 
-            String queryStatement = "SELECT Sales_Brands_id,Sales_Product_name, Sales_New_Price, Sale_Image FROM SALES.Sales_Brand where Sales_Product_name like '%" + searchProduct + "%'";
+            String queryStatement = "SELECT Sale_Image,Sales_Brands_id,Sales_Product_name, Sales_New_Price FROM SALES.Sales_Brand where Sales_Product_name like '%" + searchProduct + "%'";
             ResultSet resultSet = stmt.executeQuery(queryStatement);
 
             while(resultSet.next()){

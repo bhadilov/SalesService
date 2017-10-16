@@ -12,6 +12,8 @@ public class Product {
 
     public void setNewPrice(String NewPrice) { this.NewPrice = NewPrice; }
 
+    public void setSaleImage(String saleImage) {this.saleImage = saleImage; }
+
 
 
 
@@ -31,11 +33,10 @@ public class Product {
         this.storeLocation = storeLocation;
     }
 
-    public void setEstimatedDistance(String estimatedDistance) {
-        this.estimatedDistance = estimatedDistance;
-    }
+    public void setEstimatedDistance(String estimatedDistance) { this.estimatedDistance = estimatedDistance;}
 
-    public void setSaleImage(String saleImage) {this.saleImage = saleImage; }
+
+
 
     public void setImage(byte[] image) {
         this.image = image;
