@@ -1,7 +1,7 @@
 package com.sales;
 
 public class Product {
-    private String ProductName,BrandsID , NewPrice, salePrice, discountPercent, storeName, storeLocation, estimatedDistance;
+    private String ProductName,BrandsID , NewPrice, salePrice, discountPercent, storeName, storeLocation, estimatedDistance, saleImage;
     private byte[] image;
 
     public void setProductName(String ProductName) {this.ProductName = ProductName; }
@@ -34,6 +34,8 @@ public class Product {
     public void setEstimatedDistance(String estimatedDistance) {
         this.estimatedDistance = estimatedDistance;
     }
+
+    public void setSaleImage(String saleImage) {this.saleImage = saleImage; }
 
     public void setImage(byte[] image) {
         this.image = image;
