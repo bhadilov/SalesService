@@ -273,7 +273,7 @@ public class SalesService {
         Connection conn;
         Statement stmt;
         String[] dbDetails = getDBDetails();
-
+        
         ArrayList<Recommend> recommendations= new ArrayList<Recommend>();
 
         try{
