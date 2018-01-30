@@ -273,7 +273,7 @@ public class SalesService {
         Connection conn;
         Statement stmt;
         String[] dbDetails = getDBDetails();
-        
+
         ArrayList<Recommend> recommendations= new ArrayList<Recommend>();
 
         try{
@@ -314,8 +314,8 @@ public class SalesService {
 
     public static void main(String[] args) {
 
-        //port(8081);
-        port(8081);
+        //port(8082);
+        port(8082);
 
         get("/category", new Route() {
             public Object handle(Request req, Response res) throws Exception {
