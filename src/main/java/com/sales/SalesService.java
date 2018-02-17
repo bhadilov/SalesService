@@ -6,8 +6,8 @@ import spark.Request;
 import spark.Response;
 import spark.Route;
 
-import javax.annotation.PostConstruct;
-import javax.xml.ws.spi.http.HttpExchange;
+//import javax.annotation.PostConstruct;
+//import javax.xml.ws.spi.http.HttpExchange;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -312,6 +312,44 @@ public class SalesService {
     }
 
 
+    private static ArrayList<AllStores> getAllStores(){
+        Connection conn = null;
+        Statement stmt = null;
+        String[] dbDetails = getDBDetails();
+        ArrayList<AllStores> all_Stores = new ArrayList<AllStores>();
+
+        try{
+            Class.forName("com.mysql.jdbc.Driver");
+            conn = DriverManager.getConnection(dbDetails[0], dbDetails[1], dbDetails[2]);
+            stmt = conn.createStatement();
+
+            String queryStatement = "SELECT sl.Title,sl.TitleUrl, sc.Sales_Category_name, sl.NewPrice, " +
+                                           "sl.OldPrice, sl.Discount, sl.ImageUrl " +
+                                    "FROM sales.all_stores sl " +
+                                    "INNER JOIN sales.sales_category sc " +
+                                    "ON sl.sales_category_id = sc.Sales_Category_id";
+            ResultSet resultSet = stmt.executeQuery(queryStatement);
+
+            while(resultSet.next()){
+                AllStores allStores = new AllStores();
+                allStores.setTitle(resultSet.getString("Title"));
+                allStores.setTitleUrl(resultSet.getString("TitleUrl"));
+                allStores.setImageUrl(resultSet.getString("ImageUrl"));
+                allStores.setNewPrice(resultSet.getString("NewPrice"));
+                allStores.setOldPrice(resultSet.getString("OldPrice"));
+                allStores.setDiscount(resultSet.getString("Discount"));
+                all_Stores.add(allStores);
+            }
+
+        }
+        catch (Exception exception){
+            logger.error(exception.getMessage());
+        }
+        return all_Stores;
+    }
+
+
+
     public static void main(String[] args) {
 
         //port(8082);
@@ -323,11 +361,7 @@ public class SalesService {
             }
         }, json());
 
-        get("/recommendations", new Route() {
-            public Object handle(Request req, Response res) throws Exception {
-                return getRecommendations();
-            }
-        }, json());
+
 
 //        get("/products", new Route() {
 //            public Object handle(Request req, Response res) throws Exception {
@@ -335,6 +369,17 @@ public class SalesService {
 //            }
 //        }, json());
 
+        get("/all_Stores", new Route() {
+            public Object handle(Request req, Response res) throws Exception {
+                return getAllStores();
+            }
+        }, json());
+
+        get("/recommendations", new Route() {
+            public Object handle(Request req, Response res) throws Exception {
+                return getRecommendations();
+            }
+        }, json());
 
         get("/clothes", new Route() {
             public Object handle(Request req, Response res) throws Exception {
@@ -376,6 +421,7 @@ public class SalesService {
                 return "Test " + req.params(":search");
             }
         }, json());
+
 
 
 
