@@ -49,49 +49,6 @@ public class SalesService {
 
 
 
-//    private static ArrayList<Product> getProducts(){
-//        Connection conn = null;
-//        Statement stmt = null;
-//        String[] dbDetails = getDBDetails();
-//        ArrayList<Product> allProducts = new ArrayList<Product>();
-//
-//        try {
-//            Class.forName("com.mysql.jdbc.Driver");
-//            conn = DriverManager.getConnection(dbDetails[0], dbDetails[1], dbDetails[2]);
-//            stmt = conn.createStatement();
-//
-//            String queryStatement = "SELECT Product_Name, Brand, Discount_Perc, Images from SALES.Clothes";
-//            ResultSet resultSet = stmt.executeQuery(queryStatement);
-//
-//            while(resultSet.next()){
-//                Product product = new Product();
-//                product.setProductName(resultSet.getString("Product_Name"));
-//                //product.setBrand(resultSet.getString("Brand"));
-////                product.setOriginalPrice(resultSet.getString("Original_Price"));
-////                product.setSalePrice(resultSet.getString("Sale_Price"));
-//                product.setDiscountPercent(resultSet.getString("Discount_Perc"));
-////                product.setStoreName(resultSet.getString("Store_Name"));
-////                product.setStoreLocation(resultSet.getString("Store_Location"));
-////                product.setEstimatedDistance(resultSet.getString("Est_Distance"));
-//                Blob imageBlob = resultSet.getBlob("Images");
-//
-//                if(imageBlob != null) {
-//                    byte[] imageBytes = imageBlob.getBytes(1, (int) imageBlob.length());
-//                    product.setImage(imageBytes);
-//                }
-//                else{product.setImage(new byte[1024]);
-//                }
-//
-//                allProducts.add(product);
-//            }
-//        }
-//        catch (Exception exception){
-//            logger.error(exception.getMessage());
-//        }
-//
-//        return allProducts;
-//    }
-
     private static ArrayList<Clothes> getClothes(){
         Connection conn = null;
         Statement stmt = null;
@@ -311,7 +268,6 @@ public class SalesService {
         return recommendations;
     }
 
-
     private static ArrayList<AllStores> getAllStores(){
         Connection conn = null;
         Statement stmt = null;
@@ -348,7 +304,38 @@ public class SalesService {
         return all_Stores;
     }
 
+    private static ArrayList<AllStores> getAllStoreCategories(String categoryNumber){
+        Connection conn = null;
+        Statement stmt = null;
+        String[] dbDetails = getDBDetails();
+        ArrayList<AllStores> all_StoresCategories = new ArrayList<AllStores>();
 
+        try{
+            Class.forName("com.mysql.jdbc.Driver");
+            conn = DriverManager.getConnection(dbDetails[0], dbDetails[1], dbDetails[2]);
+            stmt = conn.createStatement();
+
+            String queryStatement = "SELECT * FROM SALES.all_stores where sales_category_id = " + categoryNumber;
+            ResultSet resultSet = stmt.executeQuery(queryStatement);
+
+            while(resultSet.next()){
+                AllStores allStoresCat = new AllStores();
+                allStoresCat.setTitle(resultSet.getString("Title"));
+                allStoresCat.setTitleUrl(resultSet.getString("TitleUrl"));
+                allStoresCat.setImageUrl(resultSet.getString("ImageUrl"));
+                allStoresCat.setNewPrice(resultSet.getString("NewPrice"));
+                allStoresCat.setOldPrice(resultSet.getString("OldPrice"));
+                allStoresCat.setDiscount(resultSet.getString("Discount"));
+
+                all_StoresCategories.add(allStoresCat);
+            }
+
+        }
+        catch (Exception exception){
+            logger.error(exception.getMessage());
+        }
+        return all_StoresCategories;
+    }
 
     public static void main(String[] args) {
 
@@ -401,6 +388,13 @@ public class SalesService {
             }
         }, json());
 
+        post("/getAllStoreCategories/:categoryNumber", new Route() {
+            public Object handle(Request req, Response res) throws Exception {
+
+                return getAllStoreCategories(req.params(":categoryNumber"));
+            }
+        }, json());
+
         post("/getProductsByID/:productID", new Route() {
             public Object handle(Request req, Response res) throws Exception {
 
@@ -414,6 +408,7 @@ public class SalesService {
                 return "Test " + req.params(":search");
             }
         }, json());
+
 
         post("getProductByID/:SalesBrandID", new Route() {
             public Object handle(Request req, Response res) throws Exception {
