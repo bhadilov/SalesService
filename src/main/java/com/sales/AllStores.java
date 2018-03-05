@@ -2,7 +2,15 @@ package com.sales;
 
 public class AllStores {
 
-    private String Title,TitleUrl, ImageUrl, NewPrice, OldPrice, Discount;
+    private String CategoryID, CategoryName, Title,TitleUrl, ImageUrl, NewPrice, OldPrice, Discount;
+
+    public void setCategoryID(String salesCategoryID) {
+        this.CategoryID = salesCategoryID;
+    }
+
+    public void setCategoryName(String salesCategoryName) {
+        this.CategoryName = salesCategoryName;
+    }
 
     public void setTitle(String salesTitle) {
         this.Title = salesTitle;

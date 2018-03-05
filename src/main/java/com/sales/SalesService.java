@@ -315,11 +315,19 @@ public class SalesService {
             conn = DriverManager.getConnection(dbDetails[0], dbDetails[1], dbDetails[2]);
             stmt = conn.createStatement();
 
-            String queryStatement = "SELECT * FROM SALES.all_stores where sales_category_id = " + categoryNumber;
+            String queryStatement = "SELECT sc.Sales_Category_id,sc.Sales_Category_name,sl.Title,sl.TitleUrl, " +
+                                         "sl.NewPrice, sl.OldPrice, sl.Discount, sl.ImageUrl " +
+                                    "FROM sales.all_stores sl " +
+                                    "INNER JOIN sales.sales_category sc " +
+                                    "ON sl.sales_category_id = sc.Sales_Category_id " +
+                                    "WHERE sl.sales_category_id = " + categoryNumber;
+
             ResultSet resultSet = stmt.executeQuery(queryStatement);
 
             while(resultSet.next()){
                 AllStores allStoresCat = new AllStores();
+                allStoresCat.setCategoryID(resultSet.getString("sales_category_id"));
+                allStoresCat.setCategoryName(resultSet.getString("sales_category_id"));
                 allStoresCat.setTitle(resultSet.getString("Title"));
                 allStoresCat.setTitleUrl(resultSet.getString("TitleUrl"));
                 allStoresCat.setImageUrl(resultSet.getString("ImageUrl"));
@@ -388,12 +396,23 @@ public class SalesService {
             }
         }, json());
 
-        post("/getAllStoreCategories/:categoryNumber", new Route() {
+        get("/getAllStoreCategories/:categoryNumber", new Route() {
             public Object handle(Request req, Response res) throws Exception {
 
                 return getAllStoreCategories(req.params(":categoryNumber"));
             }
         }, json());
+
+
+/*        get("/users/:id", (req, res) -> {
+            String id = req.params(":id");
+            User user = userService.getUser(id);
+            if (user != null) {
+                return user;
+            }
+            res.status(400);
+            return new ResponseError("No user with id '%s' found", id);
+        }, json());*/
 
         post("/getProductsByID/:productID", new Route() {
             public Object handle(Request req, Response res) throws Exception {
