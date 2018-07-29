@@ -151,36 +151,146 @@ public class SalesService {
         return categories;
     }
 
-    private static ArrayList<Product> searchForProductsByName(String searchProduct){
-        Connection conn = null;
-        Statement stmt = null;
+    private static ArrayList<Category> getAllCategories(){
+        Connection conn;
+        Statement stmt;
         String[] dbDetails = getDBDetails();
-        ArrayList<Product> allProducts = new ArrayList<Product>();
 
-        try {
+        ArrayList<Category> categories= new ArrayList<Category>();
+
+        try{
             Class.forName("com.mysql.jdbc.Driver");
             conn = DriverManager.getConnection(dbDetails[0], dbDetails[1], dbDetails[2]);
             stmt = conn.createStatement();
-
-            String queryStatement = "SELECT Sale_Image,Sales_Brands_id,Sales_Product_name, Sales_New_Price FROM SALES.Sales_Brand where Sales_Product_name like '%" + searchProduct + "%'";
+            String queryStatement = "SELECT * FROM SALES.Sales_Category";
             ResultSet resultSet = stmt.executeQuery(queryStatement);
 
             while(resultSet.next()){
-                Product product = new Product();
-                product.setProductName(resultSet.getString("Sales_Product_name"));
-                product.setBrandsID(resultSet.getString("Sales_Brands_id"));
-                product.setNewPrice(resultSet.getString("Sales_New_Price"));
-                product.setSaleImage(resultSet.getString("Sale_Image"));
+                Category category = new Category();
+                category.setSalesCategoryId(resultSet.getInt("Sales_Category_id"));
+                category.setSalesCategoryName(resultSet.getString("Sales_Category_name"));
+                category.setSalesCategoryImage(resultSet.getString("Sale_Category_Image"));
 
-
-                allProducts.add(product);
+                categories.add(category);
             }
+
         }
         catch (Exception exception){
             logger.error(exception.getMessage());
         }
+        return categories;
+    }
 
-        return allProducts;
+    private static AllStores getAllProducts(String productId){
+        Connection conn = null;
+        Statement stmt = null;
+        String[] dbDetails = getDBDetails();
+        AllStores product = new AllStores();
+
+        try{
+            Class.forName("com.mysql.jdbc.Driver");
+            conn = DriverManager.getConnection(dbDetails[0], dbDetails[1], dbDetails[2]);
+            stmt = conn.createStatement();
+
+            String queryStatement = "SELECT * FROM SALES.all_stores where all_stores.id = " + productId;
+
+            ResultSet resultSet = stmt.executeQuery(queryStatement);
+
+            while(resultSet.next()){
+               product.setProductID(resultSet.getString("id"));
+//                allStoresCat.setCategoryName(resultSet.getString("sales_category_id"));
+                product.setTitle(resultSet.getString("Title"));
+//                allStoresCat.setTitleUrl(resultSet.getString("TitleUrl"));
+                product.setImageUrl(resultSet.getString("ImageUrl"));
+                product.setNewPrice(resultSet.getString("NewPrice"));
+                product.setOldPrice(resultSet.getString("OldPrice"));
+                product.setStore(resultSet.getString("Store"));
+            }
+
+        }
+        catch (Exception exception){
+            logger.error(exception.getMessage());
+        }
+        return product;
+    }
+
+    private static ArrayList<AllStores> searchForProductsByName(String searchProduct){
+        Connection conn = null;
+        Statement stmt = null;
+        String[] dbDetails = getDBDetails();
+        ArrayList<AllStores> all_StoresCategories = new ArrayList<AllStores>();
+
+        try{
+            Class.forName("com.mysql.jdbc.Driver");
+            conn = DriverManager.getConnection(dbDetails[0], dbDetails[1], dbDetails[2]);
+            stmt = conn.createStatement();
+
+            String queryStatement = "SELECT * FROM SALES.all_stores where all_stores.Title like '%" + searchProduct + "%'";
+
+//            String queryStatement = "SELECT sc.Sales_Category_id,sc.Sales_Category_name,sl.Title, " +
+//                    "sl.NewPrice, sl.OldPrice, sl.ImageUrl " +
+//                    "FROM sales.all_stores sl " +
+//                    "INNER JOIN sales.sales_category sc " +
+//                    "ON sl.sales_category_id = sc.Sales_Category_id " +
+//                    "WHERE sl.sales_category_id = " + categoryNumber;
+
+            ResultSet resultSet = stmt.executeQuery(queryStatement);
+
+            while(resultSet.next()){
+                AllStores allStoresCat = new AllStores();
+//                allStoresCat.setCategoryID(resultSet.getString("sales_category_id"));
+//                allStoresCat.setCategoryName(resultSet.getString("sales_category_id"));
+                allStoresCat.setTitle(resultSet.getString("Title"));
+//                allStoresCat.setTitleUrl(resultSet.getString("TitleUrl"));
+                allStoresCat.setImageUrl(resultSet.getString("ImageUrl"));
+                allStoresCat.setNewPrice(resultSet.getString("NewPrice"));
+                allStoresCat.setOldPrice(resultSet.getString("OldPrice"));
+                allStoresCat.setStore(resultSet.getString("Store"));
+
+                all_StoresCategories.add(allStoresCat);
+            }
+
+        }
+        catch (Exception exception){
+            logger.error(exception.getMessage());
+        }
+        return all_StoresCategories;
+    }
+
+    private static ArrayList<AllStores> searchForProductsByExactName(String searchProduct){
+        Connection conn = null;
+        Statement stmt = null;
+        String[] dbDetails = getDBDetails();
+        ArrayList<AllStores> all_StoresCategories = new ArrayList<AllStores>();
+
+        try{
+            Class.forName("com.mysql.jdbc.Driver");
+            conn = DriverManager.getConnection(dbDetails[0], dbDetails[1], dbDetails[2]);
+            stmt = conn.createStatement();
+
+            String queryStatement = "SELECT * FROM SALES.all_stores where all_stores.Title = searchProduct";
+
+            ResultSet resultSet = stmt.executeQuery(queryStatement);
+
+            while(resultSet.next()){
+                AllStores allStoresCat = new AllStores();
+//                allStoresCat.setCategoryID(resultSet.getString("sales_category_id"));
+//                allStoresCat.setCategoryName(resultSet.getString("sales_category_id"));
+                allStoresCat.setTitle(resultSet.getString("Title"));
+//                allStoresCat.setTitleUrl(resultSet.getString("TitleUrl"));
+                allStoresCat.setImageUrl(resultSet.getString("ImageUrl"));
+                allStoresCat.setNewPrice(resultSet.getString("NewPrice"));
+                allStoresCat.setOldPrice(resultSet.getString("OldPrice"));
+                allStoresCat.setStore(resultSet.getString("Store"));
+
+                all_StoresCategories.add(allStoresCat);
+            }
+
+        }
+        catch (Exception exception){
+            logger.error(exception.getMessage());
+        }
+        return all_StoresCategories;
     }
 
     private static ArrayList<Categories> searchForProductByID(String productID){
@@ -279,8 +389,8 @@ public class SalesService {
             conn = DriverManager.getConnection(dbDetails[0], dbDetails[1], dbDetails[2]);
             stmt = conn.createStatement();
 
-            String queryStatement = "SELECT sl.Title,sl.TitleUrl, sc.Sales_Category_name, sl.NewPrice, " +
-                                           "sl.OldPrice, sl.Discount, sl.ImageUrl " +
+            String queryStatement = "SELECT sl.Title, sc.Sales_Category_name, sl.NewPrice, " +
+                                           "sl.OldPrice, sl.ImageUrl " +
                                     "FROM sales.all_stores sl " +
                                     "INNER JOIN sales.sales_category sc " +
                                     "ON sl.sales_category_id = sc.Sales_Category_id";
@@ -289,11 +399,11 @@ public class SalesService {
             while(resultSet.next()){
                 AllStores allStores = new AllStores();
                 allStores.setTitle(resultSet.getString("Title"));
-                allStores.setTitleUrl(resultSet.getString("TitleUrl"));
+//                allStores.setTitleUrl(resultSet.getString("TitleUrl"));
                 allStores.setImageUrl(resultSet.getString("ImageUrl"));
                 allStores.setNewPrice(resultSet.getString("NewPrice"));
                 allStores.setOldPrice(resultSet.getString("OldPrice"));
-                allStores.setDiscount(resultSet.getString("Discount"));
+//                allStores.setDiscount(resultSet.getString("Discount"));
                 all_Stores.add(allStores);
             }
 
@@ -315,8 +425,8 @@ public class SalesService {
             conn = DriverManager.getConnection(dbDetails[0], dbDetails[1], dbDetails[2]);
             stmt = conn.createStatement();
 
-            String queryStatement = "SELECT sc.Sales_Category_id,sc.Sales_Category_name,sl.Title,sl.TitleUrl, " +
-                                         "sl.NewPrice, sl.OldPrice, sl.Discount, sl.ImageUrl " +
+            String queryStatement = "SELECT sc.Sales_Category_id,sc.Sales_Category_name,sl.Title, " +
+                                         "sl.NewPrice, sl.OldPrice, sl.ImageUrl " +
                                     "FROM sales.all_stores sl " +
                                     "INNER JOIN sales.sales_category sc " +
                                     "ON sl.sales_category_id = sc.Sales_Category_id " +
@@ -326,14 +436,14 @@ public class SalesService {
 
             while(resultSet.next()){
                 AllStores allStoresCat = new AllStores();
-                allStoresCat.setCategoryID(resultSet.getString("sales_category_id"));
+                allStoresCat.setCategoryID(resultSet.getString("ID"));
                 allStoresCat.setCategoryName(resultSet.getString("sales_category_id"));
                 allStoresCat.setTitle(resultSet.getString("Title"));
-                allStoresCat.setTitleUrl(resultSet.getString("TitleUrl"));
+//                allStoresCat.setTitleUrl(resultSet.getString("TitleUrl"));
                 allStoresCat.setImageUrl(resultSet.getString("ImageUrl"));
                 allStoresCat.setNewPrice(resultSet.getString("NewPrice"));
                 allStoresCat.setOldPrice(resultSet.getString("OldPrice"));
-                allStoresCat.setDiscount(resultSet.getString("Discount"));
+//                allStoresCat.setDiscount(resultSet.getString("Discount"));
 
                 all_StoresCategories.add(allStoresCat);
             }
@@ -343,6 +453,42 @@ public class SalesService {
             logger.error(exception.getMessage());
         }
         return all_StoresCategories;
+    }
+
+    private static ArrayList<AllStores> getAllProductsByCategoryId(String categoryId){
+        Connection conn = null;
+        Statement stmt = null;
+        String[] dbDetails = getDBDetails();
+        ArrayList<AllStores> productList = new ArrayList<AllStores>();
+
+
+        try{
+            Class.forName("com.mysql.jdbc.Driver");
+            conn = DriverManager.getConnection(dbDetails[0], dbDetails[1], dbDetails[2]);
+            stmt = conn.createStatement();
+
+            String queryStatement = "SELECT * FROM SALES.all_stores where all_stores.sales_category_id = " + categoryId;
+
+            ResultSet resultSet = stmt.executeQuery(queryStatement);
+
+            while(resultSet.next()){
+                AllStores product = new AllStores();
+                product.setProductID(resultSet.getString("id"));
+//                allStoresCat.setCategoryName(resultSet.getString("sales_category_id"));
+                product.setTitle(resultSet.getString("Title"));
+//                allStoresCat.setTitleUrl(resultSet.getString("TitleUrl"));
+                product.setImageUrl(resultSet.getString("ImageUrl"));
+                product.setNewPrice(resultSet.getString("NewPrice"));
+                product.setOldPrice(resultSet.getString("OldPrice"));
+                product.setStore(resultSet.getString("Store"));
+                productList.add(product);
+            }
+
+        }
+        catch (Exception exception){
+            logger.error(exception.getMessage());
+        }
+        return productList;
     }
 
     public static void main(String[] args) {
@@ -357,18 +503,19 @@ public class SalesService {
         }, json());
 
 
-
-//        get("/products", new Route() {
-//            public Object handle(Request req, Response res) throws Exception {
-//                return getProducts();
-//            }
-//        }, json());
-
         get("/all_Stores", new Route() {
             public Object handle(Request req, Response res) throws Exception {
                 return getAllStores();
             }
         }, json());
+
+        get("/getAllCategories", new Route() {
+            public Object handle(Request req, Response res) throws Exception {
+                return getAllCategories();
+            }
+        }, json());
+
+
 
         get("/recommendations", new Route() {
             public Object handle(Request req, Response res) throws Exception {
@@ -389,10 +536,35 @@ public class SalesService {
             }
         }, json());
 
+        get("/allProductsByCategoryId/:categoryId", new Route() {
+            public Object handle(Request req, Response res) throws Exception {
+//                string categoryId = req.params(":categoryId");
+//                logger.info("Attempting to call getAllProductsByCategoryId(" + categoryId + ")");
+//                var results = getAllProductsByCategoryId(categoryId);
+                logger.info("Called getAllProductsByCategoryId() successfully");
+                return getAllProductsByCategoryId(req.params(":categoryId"));
+            }
+        }, json());
+
         post("/searchProducts/:searchProduct", new Route() {
             public Object handle(Request req, Response res) throws Exception {
 
                 return searchForProductsByName(req.params(":searchProduct"));
+            }
+        }, json());
+
+        post("/searchProductsInCategory/:searchProduct", new Route() {
+            public Object handle(Request req, Response res) throws Exception {
+                //string product
+                //logger.info(req.params.get("searchTerm"));
+                return searchForProductsByName(req.params(":searchProduct"));
+            }
+        }, json());
+
+        post("/searchProductsByExactName/:searchProduct", new Route() {
+            public Object handle(Request req, Response res) throws Exception {
+
+                return searchForProductsByExactName(req.params(":searchProduct"));
             }
         }, json());
 
@@ -404,6 +576,14 @@ public class SalesService {
         }, json());
 
 
+
+//        get("/getAllProducts", new Route() {
+//            public Object handle(Request req, Response res) throws Exception {
+//
+//                return getAllProducts();
+//            }
+//        }, json());
+
 /*        get("/users/:id", (req, res) -> {
             String id = req.params(":id");
             User user = userService.getUser(id);
@@ -414,10 +594,10 @@ public class SalesService {
             return new ResponseError("No user with id '%s' found", id);
         }, json());*/
 
-        post("/getProductsByID/:productID", new Route() {
-            public Object handle(Request req, Response res) throws Exception {
+       get("/getProductsByID/:productID", new Route() {
+          public Object handle(Request req, Response res) throws Exception {
 
-                return searchForProductByID(req.params(":productID"));
+                return getAllProducts(req.params(":productID"));
             }
         }, json());
 
@@ -435,10 +615,6 @@ public class SalesService {
                 return "Test " + req.params(":search");
             }
         }, json());
-
-
-
-
 
     }
 }
