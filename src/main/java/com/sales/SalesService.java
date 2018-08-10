@@ -491,41 +491,41 @@ public class SalesService {
         return productList;
     }
 
-    private static ArrayList<AllStores> getAllProductsByCategoryId(String categoryId){
-        Connection conn = null;
-        Statement stmt = null;
-        String[] dbDetails = getDBDetails();
-        ArrayList<AllStores> productList = new ArrayList<AllStores>();
-
-
-        try{
-            Class.forName("com.mysql.jdbc.Driver");
-            conn = DriverManager.getConnection(dbDetails[0], dbDetails[1], dbDetails[2]);
-            stmt = conn.createStatement();
-
-            String queryStatement = "SELECT * FROM SALES.all_stores where all_stores.sales_category_id = " + categoryId;
-
-            ResultSet resultSet = stmt.executeQuery(queryStatement);
-
-            while(resultSet.next()){
-                AllStores product = new AllStores();
-                product.setProductID(resultSet.getString("id"));
-//                allStoresCat.setCategoryName(resultSet.getString("sales_category_id"));
-                product.setTitle(resultSet.getString("Title"));
-//                allStoresCat.setTitleUrl(resultSet.getString("TitleUrl"));
-                product.setImageUrl(resultSet.getString("ImageUrl"));
-                product.setNewPrice(resultSet.getString("NewPrice"));
-                product.setOldPrice(resultSet.getString("OldPrice"));
-                product.setStore(resultSet.getString("Store"));
-                productList.add(product);
-            }
-
-        }
-        catch (Exception exception){
-            logger.error(exception.getMessage());
-        }
-        return productList;
-    }
+//    private static ArrayList<AllStores> getAllProductsByCategoryId(String categoryId){
+//        Connection conn = null;
+//        Statement stmt = null;
+//        String[] dbDetails = getDBDetails();
+//        ArrayList<AllStores> productList = new ArrayList<AllStores>();
+//
+//
+//        try{
+//            Class.forName("com.mysql.jdbc.Driver");
+//            conn = DriverManager.getConnection(dbDetails[0], dbDetails[1], dbDetails[2]);
+//            stmt = conn.createStatement();
+//
+//            String queryStatement = "SELECT * FROM SALES.all_stores where all_stores.sales_category_id = " + categoryId;
+//
+//            ResultSet resultSet = stmt.executeQuery(queryStatement);
+//
+//            while(resultSet.next()){
+//                AllStores product = new AllStores();
+//                product.setProductID(resultSet.getString("id"));
+////                allStoresCat.setCategoryName(resultSet.getString("sales_category_id"));
+//                product.setTitle(resultSet.getString("Title"));
+////                allStoresCat.setTitleUrl(resultSet.getString("TitleUrl"));
+//                product.setImageUrl(resultSet.getString("ImageUrl"));
+//                product.setNewPrice(resultSet.getString("NewPrice"));
+//                product.setOldPrice(resultSet.getString("OldPrice"));
+//                product.setStore(resultSet.getString("Store"));
+//                productList.add(product);
+//            }
+//
+//        }
+//        catch (Exception exception){
+//            logger.error(exception.getMessage());
+//        }
+//        return productList;
+//    }
 
     public static void main(String[] args) {
 
@@ -597,12 +597,12 @@ public class SalesService {
             }
         }, json());
 
-        post("/addItemToWishList/:productId", new Route() {
-            public Object handle(Request req, Response res) throws Exception {
-
-                return addItemToWishList(req.params(":productId"));
-            }
-        }, json());
+//        post("/addItemToWishList/:productId", new Route() {
+//            public Object handle(Request req, Response res) throws Exception {
+//
+//                return addItemToWishList(req.params(":productId"));
+//            }
+//        }, json());
 
         get("/searchProductsByExactName/:searchProduct", new Route() {
             public Object handle(Request req, Response res) throws Exception {
