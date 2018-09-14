@@ -268,7 +268,7 @@ public class SalesService {
             conn = DriverManager.getConnection(dbDetails[0], dbDetails[1], dbDetails[2]);
             stmt = conn.createStatement();
 
-            String queryStatement = "SELECT * FROM SALES.all_stores where all_stores.Title = searchProduct";
+            String queryStatement = "SELECT * FROM SALES.all_stores where all_stores.Title = '" + searchProduct + "'";
 
             ResultSet resultSet = stmt.executeQuery(queryStatement);
 
