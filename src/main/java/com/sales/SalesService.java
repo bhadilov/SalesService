@@ -229,8 +229,8 @@ public class SalesService {
 
 //            String queryStatement = "SELECT sc.Sales_Category_id,sc.Sales_Category_name,sl.Title, " +
 //                    "sl.NewPrice, sl.OldPrice, sl.ImageUrl " +
-//                    "FROM sales.all_stores sl " +
-//                    "INNER JOIN sales.sales_category sc " +
+//                    "FROM SALES.all_stores sl " +
+//                    "INNER JOIN SALES.sales_category sc " +
 //                    "ON sl.sales_category_id = sc.Sales_Category_id " +
 //                    "WHERE sl.sales_category_id = " + categoryNumber;
 
@@ -391,8 +391,8 @@ public class SalesService {
 
             String queryStatement = "SELECT sl.Title, sc.Sales_Category_name, sl.NewPrice, " +
                                            "sl.OldPrice, sl.ImageUrl " +
-                                    "FROM sales.all_stores sl " +
-                                    "INNER JOIN sales.sales_category sc " +
+                                    "FROM SALES.all_stores sl " +
+                                    "INNER JOIN SALES.sales_category sc " +
                                     "ON sl.sales_category_id = sc.Sales_Category_id";
             ResultSet resultSet = stmt.executeQuery(queryStatement);
 
@@ -427,8 +427,8 @@ public class SalesService {
 
             String queryStatement = "SELECT sc.Sales_Category_id,sc.Sales_Category_name,sl.Title, " +
                                          "sl.NewPrice, sl.OldPrice, sl.ImageUrl " +
-                                    "FROM sales.all_stores sl " +
-                                    "INNER JOIN sales.sales_category sc " +
+                                    "FROM SALES.all_stores sl " +
+                                    "INNER JOIN SALES.sales_category sc " +
                                     "ON sl.sales_category_id = sc.Sales_Category_id " +
                                     "WHERE sl.sales_category_id = " + categoryNumber;
 
