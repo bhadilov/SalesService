@@ -659,6 +659,35 @@ public class SalesService {
             }
         }, json());
 
+
+        options("/*",
+                new Route() {
+                    public Object handle(Request request, Response response) throws Exception {
+
+                        String accessControlRequestHeaders = request
+                                .headers("Access-Control-Request-Headers");
+                        if (accessControlRequestHeaders != null) {
+                            response.header("Access-Control-Allow-Headers",
+                                    accessControlRequestHeaders);
+                        }
+
+                        String accessControlRequestMethod = request
+                                .headers("Access-Control-Request-Method");
+                        if (accessControlRequestMethod != null) {
+                            response.header("Access-Control-Allow-Methods",
+                                    accessControlRequestMethod);
+                        }
+
+                        return "OK";
+                    }
+                });
+
+        before(new Filter() {
+            public void handle(Request request, Response response) throws Exception {
+                response.header("Access-Control-Allow-Origin", "*");
+            }
+        });
+
     }
 }
 
