@@ -655,7 +655,7 @@ public class SalesService {
         post("getProductByID/:SalesBrandID", new Route() {
             public Object handle(Request req, Response res) throws Exception {
 
-                return "Test " + req.params(":search");
+                return "Test " + req.params(":SalesBrandID");
             }
         }, json());
 
