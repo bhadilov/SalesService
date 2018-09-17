@@ -59,7 +59,7 @@ public class SalesService {
             conn = DriverManager.getConnection(dbDetails[0], dbDetails[1], dbDetails[2]);
             stmt = conn.createStatement();
 
-            String queryStatement = "SELECT Sales_Product_name, Sales_brand_Type_id, Sales_Original_Price, Sales_New_Price, Sale_Image FROM SALES.Sales_Brand where Sales_Brand_Category_id = 1";
+            String queryStatement = "SELECT Sales_Product_name, Sales_brand_Type_id, Sales_Original_Price, Sales_New_Price, Sale_Image FROM SALES.sales_brand where Sales_Brand_Category_id = 1";
             ResultSet resultSet = stmt.executeQuery(queryStatement);
 
             while(resultSet.next()){
@@ -132,7 +132,7 @@ public class SalesService {
             Class.forName("com.mysql.jdbc.Driver");
             conn = DriverManager.getConnection(dbDetails[0], dbDetails[1], dbDetails[2]);
             stmt = conn.createStatement();
-            String queryStatement = "SELECT Sales_Category_id, Sales_Category_name FROM SALES.Sales_Category";
+            String queryStatement = "SELECT Sales_Category_id, Sales_Category_name FROM SALES.sales_category";
             ResultSet resultSet = stmt.executeQuery(queryStatement);
 
             while(resultSet.next()){
@@ -161,7 +161,7 @@ public class SalesService {
             Class.forName("com.mysql.jdbc.Driver");
             conn = DriverManager.getConnection(dbDetails[0], dbDetails[1], dbDetails[2]);
             stmt = conn.createStatement();
-            String queryStatement = "SELECT * FROM SALES.Sales_Category";
+            String queryStatement = "SELECT * FROM SALES.sales_category";
             ResultSet resultSet = stmt.executeQuery(queryStatement);
 
             while(resultSet.next()){
