@@ -396,6 +396,7 @@ public class SalesService {
             ResultSet resultSet = stmt.executeQuery(queryStatement);
 
             while(resultSet.next()){
+                logger.info("Found results");
                 AllStores allStores = new AllStores();
                 allStores.setTitle(resultSet.getString("Title"));
 //                allStores.setTitleUrl(resultSet.getString("TitleUrl"));
