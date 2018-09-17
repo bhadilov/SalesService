@@ -390,13 +390,12 @@ public class SalesService {
 
             String queryStatement = "SELECT sl.Title, sc.Sales_Category_name, sl.NewPrice, " +
                                            "sl.OldPrice, sl.ImageUrl " +
-                                    "FROM SALES.all_stores sl " +
-                                    "INNER JOIN SALES.Sales_Category sc " +
+                                    "FROM all_stores sl " +
+                                    "INNER JOIN Sales_Category sc " +
                                     "ON sl.sales_category_id = sc.Sales_Category_id";
             ResultSet resultSet = stmt.executeQuery(queryStatement);
 
             while(resultSet.next()){
-                logger.info("Found results");
                 AllStores allStores = new AllStores();
                 allStores.setTitle(resultSet.getString("Title"));
 //                allStores.setTitleUrl(resultSet.getString("TitleUrl"));
@@ -412,7 +411,6 @@ public class SalesService {
             logger.error(exception.getMessage());
         }
 
-        logger.info("In all stores");
         return all_Stores;
     }
 
