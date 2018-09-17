@@ -391,7 +391,7 @@ public class SalesService {
             String queryStatement = "SELECT sl.Title, sc.Sales_Category_name, sl.NewPrice, " +
                                            "sl.OldPrice, sl.ImageUrl " +
                                     "FROM SALES.all_stores sl " +
-                                    "INNER JOIN SALES.sales_sategory sc " +
+                                    "INNER JOIN SALES.sales_category sc " +
                                     "ON sl.sales_category_id = sc.Sales_Category_id";
             ResultSet resultSet = stmt.executeQuery(queryStatement);
 
