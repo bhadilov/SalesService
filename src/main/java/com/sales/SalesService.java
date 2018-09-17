@@ -411,6 +411,8 @@ public class SalesService {
         catch (Exception exception){
             logger.error(exception.getMessage());
         }
+
+        logger.info("In all stores");
         return all_Stores;
     }
 
