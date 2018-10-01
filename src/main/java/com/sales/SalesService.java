@@ -443,6 +443,7 @@ public class SalesService {
                 allStoresCat.setImageUrl(resultSet.getString("ImageUrl"));
                 allStoresCat.setNewPrice(resultSet.getString("NewPrice"));
                 allStoresCat.setOldPrice(resultSet.getString("OldPrice"));
+                allStoresCat.setStore(resultSet.getString("Store"));
 //                allStoresCat.setDiscount(resultSet.getString("Discount"));
 
                 all_StoresCategories.add(allStoresCat);
