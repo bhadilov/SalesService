@@ -94,7 +94,7 @@ public class SalesService {
                     "FROM SALES.sales_brand sb INNER JOIN SALES.sales_brand_type sbt ON sb.Sales_brand_Type_id = sbt.Sales_Brand_Type_id " +
                     "INNER JOIN SALES.Sales_Malls_Location sd ON sb.Sales_Malls_Location_id = sd.Sales_Malls_Location_id " +
                     "INNER JOIN SALES.sales_category sc ON sb.Sales_Brand_Category_id = sc.Sales_Category_id " +
-                    "INNER JOIN SALES.Sales_Brands_Name sbn ON sb.Sales_Brand_Name_id = sbn.Sales_Brands_Name_id " +
+                    "INNER JOIN SALES.sales_brands_name sbn ON sb.Sales_Brand_Name_id = sbn.Sales_Brands_Name_id " +
                     "ORDER BY sc.Sales_Category_name, sbt.Sales_Brand_Type_name  Desc;";
             ResultSet resultSet = stmt.executeQuery(queryStatement);
 
@@ -307,7 +307,7 @@ public class SalesService {
                     "FROM SALES.sales_brand sb INNER JOIN SALES.sales_brand_type sbt ON sb.Sales_brand_Type_id = sbt.Sales_Brand_Type_id " +
                     "INNER JOIN SALES.Sales_Malls_Location sd ON sb.Sales_Malls_Location_id = sd.Sales_Malls_Location_id " +
                     "INNER JOIN SALES.sales_category sc ON sb.Sales_Brand_Category_id = sc.Sales_Category_id " +
-                    "INNER JOIN SALES.Sales_Brands_Name sbn ON sb.Sales_Brand_Name_id = sbn.Sales_Brands_Name_id " +
+                    "INNER JOIN SALES.sales_brands_name sbn ON sb.Sales_Brand_Name_id = sbn.Sales_Brands_Name_id " +
                     "where sb.Sales_Brands_id = " + productID + " " +
                     "ORDER BY sc.Sales_Category_name, sbt.Sales_Brand_Type_name  Desc;";
             ResultSet resultSet = stmt.executeQuery(queryStatement);
@@ -349,8 +349,8 @@ public class SalesService {
             String queryStatement = "SELECT sb.Sales_Brands_id, sb.Sales_Product_name, sbt.Sales_Brand_Type_name, sc.Sales_Category_id, sc.Sales_Category_name, sbn.Sales_Brands_Name, sb.Sales_Original_Price, sb.Sales_New_Price, sb.Sale_Image,sd.Sale_Malls_Name " +
                     "FROM SALES.sales_brand sb INNER JOIN SALES.sales_brand_type sbt ON sb.git _id = sbt.Sales_Brand_Type_id " +
                     "INNER JOIN SALES.Sales_Malls_Location sd ON sb.Sales_Malls_Location_id = sd.Sales_Malls_Location_id " +
-                    "INNER JOIN SALES.sales_category sc ON sb.Sales_Brand_Category_id = sc.Sales_Category_id " +
-                    "INNER JOIN SALES.Sales_Brands_Name sbn ON sb.Sales_Brand_Name_id = sbn.Sales_Brands_Name_id " +
+                    "INNER JOIN SALES.sales_ategory sc ON sb.Sales_Brand_Category_id = sc.Sales_Category_id " +
+                    "INNER JOIN SALES.sales_brands_name sbn ON sb.Sales_Brand_Name_id = sbn.Sales_Brands_Name_id " +
                     "ORDER BY sb.Sales_New_Price desc, sb.Sales_Product_name desc";
             ResultSet resultSet = stmt.executeQuery(queryStatement);
 
@@ -436,7 +436,7 @@ public class SalesService {
 
             while(resultSet.next()){
                 AllStores allStoresCat = new AllStores();
-                allStoresCat.setCategoryID(resultSet.getString("ID"));
+//                allStoresCat.setCategoryID(resultSet.getString("ID"));
                 allStoresCat.setCategoryName(resultSet.getString("sales_category_id"));
                 allStoresCat.setTitle(resultSet.getString("Title"));
 //                allStoresCat.setTitleUrl(resultSet.getString("TitleUrl"));
