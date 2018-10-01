@@ -426,7 +426,7 @@ public class SalesService {
             stmt = conn.createStatement();
 
             String queryStatement = "SELECT sc.Sales_Category_id,sc.Sales_Category_name,sl.Title, " +
-                                         "sl.NewPrice, sl.OldPrice, sl.ImageUrl " +
+                                         "sl.NewPrice, sl.OldPrice, sl.Store, sl.ImageUrl " +
                                     "FROM SALES.all_stores sl " +
                                     "INNER JOIN SALES.sales_category sc " +
                                     "ON sl.sales_category_id = sc.Sales_Category_id " +
